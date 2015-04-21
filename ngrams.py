@@ -7,7 +7,7 @@ import string, argparse, os
 
 # Here I take care of the command line arguments
 parser = argparse.ArgumentParser(description='Extracts strings from a binary file and analizes their ngrams.', add_help=True)
-parser.add_argument('-n', dest='n', required=False, type=int, default=2, help='ngram length, default = 3')
+parser.add_argument('-n', dest='n', required=False, type=int, default=3, help='ngram length, default = 3')
 parser.add_argument('-s', dest='s', required=False, type=int, default=1, help='Sliding window, default = 1')
 parser.add_argument('-i', dest='input', required=True, help='Input file')
 #parser.add_argument('-o', dest='output', required=True, help='Output file')
@@ -52,9 +52,8 @@ def strings(filename):
 def ngram(input_list, n):
     for string in input_list:
         values = []
-        tuples = zip(*[string[i:] for i in range(n)])
-        for i in tuples:
-            values.append(''.join(list(i)))
+        # All the ngram generation code in a single, really hard to understand line. Cheers!
+        values.append([string[i:i+n] for i in range(0, len(string)-n+s, s)])
         yield values
 
 strs = list(strings(input))
